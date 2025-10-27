@@ -1,4 +1,4 @@
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,5 +34,30 @@ public class ProdutoTest {
     @Test
     public void naoCriaProdutoComMargemNegativa(){
         assertThrows(IllegalArgumentException.class, () -> new Produto("teste", 5, -1));
+    }
+
+    @Test
+    public void gerenciaEstoque(){
+        Produto p = new Produto("Produto E", 10.0);
+        assertEquals(0, p.getQuantidade());
+        p.adicionarEstoque(5);
+        assertEquals(5, p.getQuantidade());
+        p.removerEstoque(3);
+        assertEquals(2, p.getQuantidade());
+    }
+
+    @Test
+    public void naoRemoveMaisQueExiste(){
+        Produto p = new Produto("Produto F", 5.0);
+        p.adicionarEstoque(2);
+        assertThrows(IllegalArgumentException.class, () -> p.removerEstoque(3));
+    }
+
+    @Test
+    public void abaixoDoEstoqueMinimoFunciona(){
+        Produto p = new Produto("Produto G", 2.0);
+        p.adicionarEstoque(2);
+        p.setEstoqueMinimo(5);
+        assertTrue(p.abaixoDoEstoqueMinimo());
     }
 }
